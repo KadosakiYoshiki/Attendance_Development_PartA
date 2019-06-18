@@ -1,0 +1,125 @@
+[33mcommit cde5f95abfbfb6eb05ea7fb5f0409a0ace06c32b[m[33m ([m[1;36mHEAD -> [m[1;32medit-admin-page[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmaster[m[33m)[m
+Author: EC2 Default User <ec2-user@ip-172-31-40-109.us-east-2.compute.internal>
+Date:   Mon Jun 17 01:19:04 2019 +0000
+
+    Add Superior user
+
+[33mcommit ec45c8bc50359c9e78cc4e97e83e8269495a4979[m
+Author: EC2 Default User <ec2-user@ip-172-31-21-120.us-east-2.compute.internal>
+Date:   Fri Jun 14 16:19:05 2019 +0000
+
+    Finish adjust bug to complete app PartB
+
+[33mcommit 9465fd2845ba248a1b18857259ad6823adc486cd[m
+Author: EC2 Default User <ec2-user@ip-172-31-21-120.us-east-2.compute.internal>
+Date:   Fri Jun 14 10:52:48 2019 +0000
+
+    Finish configuraion varidation general user cannot watch another user's attendance
+
+[33mcommit 91d3c18e6e0a1be1414e5c9195d8329cca66aea3[m
+Author: EC2 Default User <ec2-user@ip-172-31-21-120.us-east-2.compute.internal>
+Date:   Thu Jun 13 11:56:21 2019 +0000
+
+    user_search_implementation_latest
+
+[33mcommit 65b022e0daa468e20e674ecb08731af273d2357b[m
+Author: EC2 Default User <ec2-user@ip-172-31-21-120.us-east-2.compute.internal>
+Date:   Wed Jun 12 13:12:32 2019 +0000
+
+    Change from HTTPS to SSH and Start Development
+
+[33mcommit 0f12785c7f1ad2de0adebb4431a2d4a3bcaff3b2[m
+Author: TenTan441 <myutos44@gmail.com>
+Date:   Wed Jun 12 10:44:04 2019 +0000
+
+    Update Gemfile for Heroku
+
+[33mcommit 853959b2b8ba361e3ccbc3e3ddcd30a64f67d434[m
+Author: TenTan441 <myutos44@gmail.com>
+Date:   Wed Jun 12 10:31:53 2019 +0000
+
+    Change from HTTPS to SSH
+
+[33mcommit 062485c55fff99d0fe9bb23c451e74ecc74d53ea[m
+Author: TenTan441 <myutos44@gmail.com>
+Date:   Wed Jun 12 10:21:52 2019 +0000
+
+    Finish edit-attendances
+
+[33mcommit 08868fad649a614703d98e850785a886362f58b6[m
+Author: TenTan441 <myutos44@gmail.com>
+Date:   Wed Jun 12 07:17:54 2019 +0000
+
+    Finish add-user-attendances
+
+[33mcommit 82392548c7e03e71e0cd58dc132f91fcebe6740c[m
+Author: TenTan441 <myutos44@gmail.com>
+Date:   Tue Jun 11 08:32:54 2019 +0000
+
+    Finish add-basic-info
+
+[33mcommit e0c8c4b2e6c325f3ecd16ec27cf06e8fc3c3bfad[m
+Author: TenTan441 <myutos44@gmail.com>
+Date:   Tue Jun 11 07:16:11 2019 +0000
+
+    Finish japanization-and-time-format
+
+[33mcommit d920b58a28599753c91b9c2f98eed2849f8a17d0[m
+Author: TenTan441 <myutos44@gmail.com>
+Date:   Tue Jun 11 04:45:31 2019 +0000
+
+    Finish editing-users
+
+[33mcommit 74270dc9391b373090b49fd374313c69df8fc234[m
+Author: TenTan441 <myutos44@gmail.com>
+Date:   Tue Jun 11 02:39:11 2019 +0000
+
+    Finish full-fledged-login
+
+[33mcommit eff17b640ca723c55f4660d0b56a7f5bd3470b60[m
+Author: TenTan441 <myutos44@gmail.com>
+Date:   Mon Jun 10 15:39:09 2019 +0000
+
+    Finish signup-user
+
+[33mcommit 6581de12fbf476182abff419894eca72c0201f64[m
+Author: TenTan441 <myutos44@gmail.com>
+Date:   Mon Jun 10 14:00:47 2019 +0000
+
+    Finish modeling-user
+
+[33mcommit 78cc185f5764cf822f4c1fa6ab77a90cec6509d4[m
+Author: TenTan441 <myutos44@gmail.com>
+Date:   Mon Jun 10 13:33:37 2019 +0000
+
+    Finish page-layout
+
+[33mcommit a62087690b0830ccf115616918b98bd9a652c605[m
+Author: TenTan441 <myutos44@gmail.com>
+Date:   Mon Jun 10 13:16:36 2019 +0000
+
+    Finish top-page
+
+[33mcommit 3ada04121df04e9709b240cdcc14a9a3456044e5[m
+Author: TenTan441 <myutos44@gmail.com>
+Date:   Mon Jun 10 13:00:31 2019 +0000
+
+    static_pagesコントローラを追加
+
+[33mcommit 5883f1d6fa5c60f772123f34b2edcbdf078ccdbf[m
+Author: TenTan441 <myutos44@gmail.com>
+Date:   Mon Jun 10 12:58:24 2019 +0000
+
+    日時の設定を追加
+
+[33mcommit 1ec35fa8f853c90a3e4bd1edecae016fa0a085a6[m
+Author: TenTan441 <myutos44@gmail.com>
+Date:   Mon Jun 10 12:56:25 2019 +0000
+
+    READMEを修正
+
+[33mcommit 3d9d6f5f46f126c3614e46be0a90de09cdf5df3b[m
+Author: TenTan441 <myutos44@gmail.com>
+Date:   Mon Jun 10 12:51:18 2019 +0000
+
+    Initialize repository
