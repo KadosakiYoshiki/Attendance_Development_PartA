@@ -6,31 +6,16 @@
   <table class="table table-condensed table-hover" id="table-users">
     <thead>
       <tr>
-        <th>社員番号</th>
+        <th>社員番号（user_id）</th>
         <th>名前</th>
       </tr>
     </thead>
 
-    <% @users.each do |user| %>
+    <% @dutys.each do |duty| %>
       <tr>
-        <td>
-          <%= link_to user.name, user %>
-        </td>
-        <td class="center"><%= user.department.present? ? user.department : "未所属" %></td>
-        <td class="center"><%= format_basic_info(user.basic_time) %></td>
-        <td class="center"><%= format_basic_info(user.work_time) %></td>
-        <td class="center">
-          <% if !user.admin? %>
-            <%= link_to "基本情報編集", edit_basic_info_user_path(user), remote: true, class: "btn btn-success" %>
-            <%= link_to "削除", user, method: :delete,
-                data: { confirm: "削除してよろしいですか？" }, class: "btn btn-danger" %>
-          <% end %>
-        </td>
+        <td><%= duty.user_id %></td>
+        <td><%= @users.find_by(id: duty.user_id).name %></td>
       </tr>
     <% end %>
   </table>
-  <%= will_paginate %>
 </div>
-
-<!--モーダルウインドウ表示-->
-<div id="edit-basic-info" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>

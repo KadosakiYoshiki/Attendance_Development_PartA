@@ -10,6 +10,11 @@ class UsersController < ApplicationController
     @users = User.search(params[:search]).paginate(page: params[:page])
   end
   
+  def duty
+    @dutys = Attendance.where(worked_on: Date.current).where.not(started_at: nil).where(finished_at: nil)
+    @users = User.all
+  end
+  
   def show
     @worked_sum = @attendances.where.not(started_at: nil).count
   end
