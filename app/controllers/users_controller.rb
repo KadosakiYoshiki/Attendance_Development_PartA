@@ -34,6 +34,44 @@ class UsersController < ApplicationController
     end
   end
   
+  def import
+=begin
+  現状：正しい形式で登録しないとエラーになり、処理が止まってしまう
+  　　　新しく登録する扱いとなるが、IDを入力する必要がある
+  目標：  間違った形式が含まれていた場合はそのレコードに対してバリデーションメッセージ表示
+  　　　  　その場合は処理をスキップさせる
+  　　　　CSVファイルにIDを入力する必要あるため、入力不要でID自動付与されるようにしていく
+  参考にしたサイト：https://ruby-rails.hatenadiary.com/entry/20141120/1416483136#csv_import_import_csv
+                    https://qiita.com/m-shin/items/7e8cdea2644e47b87fbf
+                    
+=end
+    # 登録処理前のレコード数
+    current_user_count = ::User.count
+    users = []
+    # windowsで作られたファイルに対応するので、encoding: 'UTF-8'を付けている
+    CSV.foreach(params[:users_file].path, headers: true, encoding: "UTF-8") do |row|
+      users << ::User.new({ 
+        name:                       row['name'],
+        email:                      row['email'],
+        department:                 row['affiliation'],
+        employee_number:            row['employee_number'],	
+        uid:                        row['uid'],
+        basic_work_time:            row['basic_work_time'],
+        designated_work_start_time: row['designated_work_start_time'],
+        designated_work_end_time:   row['designated_work_end_time'],
+        superior:                   row['superior'],
+        admin:                      row['admin'],
+        password:                   row['password'] })
+    end
+    # importメソッドでバルクインサートできる
+    ::User.import(users)
+    # 何レコード登録できたかを返す
+    ::User.count - current_user_count
+    
+    redirect_to users_path
+    
+  end
+  
   def edit
   end
   
@@ -70,7 +108,7 @@ class UsersController < ApplicationController
     end
     
     def basic_info_params
-      params.require(:user).permit(:department, :basic_time, :work_time)
+      params.require(:user).permit(:name, :email, :department, :employee_number, :uid, :basic_work_time, :designated_work_start_time, :designated_work_end_time, :password, :password_confirmation, :basic_time, :work_time)
     end
     
     def import_users
@@ -96,5 +134,5 @@ class UsersController < ApplicationController
       ::User.import(users)
       # 何レコード登録できたかを返す
       ::User.count - current_user_count
-  end
+    end
 end

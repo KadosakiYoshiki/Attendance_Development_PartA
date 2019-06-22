@@ -14,6 +14,7 @@ class User < ApplicationRecord
   validates :work_time, presence: true
   has_secure_password
   validates :password, presence: true, length: { minimum: 6 }, allow_nil: true
+  validates :uid, presence: true, uniqueness: true
   
   # 渡された文字列のハッシュ値を返します。
   def User.digest(string)
@@ -57,5 +58,19 @@ class User < ApplicationRecord
       all
     end
   end
+=begin
+  def self.import(file)
+    CSV.foreach(file.path, headers: true) do |row|
 
+      obj = new
+      obj.attributes = row.to_hash.slice(*updatable_attributes)
+
+      obj.save!
+    end
+  end
+
+  def self.updatable_attributes
+    ["name","status","content"]
+  end
+=end
 end

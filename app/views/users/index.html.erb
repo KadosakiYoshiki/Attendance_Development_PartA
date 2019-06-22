@@ -1,4 +1,7 @@
-<% provide(:title, 'All Users') %>
+<% provide(:title, '社員一覧') %>
+<% provide(:class_text, 'basic-info') %>
+<% provide(:button_text, '更新') %>
+
 <% if params[:search].blank? %>
   <h1>ユーザー一覧</h1>
 <% else %>
@@ -17,7 +20,7 @@
   </div>
   
   <div>
-    <%= form_tag users_path, method: :post, multipart: true do |f| %>
+    <%= form_tag users_import_url, method: :post, multipart: true do |f| %>
       <div class="search_item">
         <%= text_field_tag 'filename',"", id: "filename", disabled: true %>
         <%= file_field_tag 'users_file', id: "file_input", style: "display: none;", onchange: "file_selected($(this));" %>
@@ -28,38 +31,102 @@
       </div>
     <% end %>
   </div>
+  
+  <section>
+    <div class="panel-group" id="accordion">
+      
+      <% @users.each do |user| %>
+        
+        <!-- とっても恥ずかしいコード 
+            ↓あまりにも不格好すぎるため代替案急務
+        !-->
+        <% @user = user %>
+        
+        <%= user.name %>
+        <%= "|" %><%= link_to "削除", user, method: :delete, data: { confirm: "削除してよろしいですか？" }, class: "btn btn-primary" %>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title accordion-toggle">
+              <a data-toggle="collapse" data-parent="#accordion" href="#collapse<%= user.id %>" class="collapsed">基本情報編集</a>
+            </h4>
+          </div>
+          <div id="collapse<%= user.id %>" class="panel-collapse collapse">
+            <div class="panel-body">
+              <%= form_with(model: @user, url: update_basic_info_user_path(@user), local: true) do |f| %>
+                <%= render 'shared/error_messages', object: @user %>
+              
+                <%= f.label :name, class: "label-#{yield(:class_text)}" %>
+                <%= f.text_field :name, class: "form-control" %>
+              
+                <%= f.label :email, class: "label-#{yield(:class_text)}" %>
+                <%= f.email_field :email, class: "form-control" %>
+                
+                <%= f.label :department, class: "label-#{yield(:class_text)}" %>
+                <%= f.text_field :department, class: "form-control" %>
+              
+                <%= f.label :employee_number, class: "label-#{yield(:class_text)}" %>
+                <%= f.text_field :employee_number, class: "form-control" %>
+                
+                <%= f.label :uid, class: "label-#{yield(:class_text)}" %>
+                <%= f.text_field :uid, class: "form-control" %>
+                
+                <%= f.label :basic_work_time, class: "label-#{yield(:class_text)}" %>
+                <%= f.text_field :basic_work_time, class: "form-control" %>
+                
+                <%= f.label :designated_work_start_time, class: "label-#{yield(:class_text)}" %>
+                <%= f.text_field :designated_work_start_time, class: "form-control" %>
+                
+                <%= f.label :designated_work_end_time, class: "label-#{yield(:class_text)}" %>
+                <%= f.text_field :designated_work_end_time, class: "form-control" %>
 
+                <%= f.label :password, class: "label-#{yield(:class_text)}" %>
+                <%= f.password_field :password, class: "form-control" %>
+              
+                <%= f.label :password_confirmation, class: "label-#{yield(:class_text)}" %>
+                <%= f.password_field :password_confirmation, class: "form-control" %>
+              
+                <%= f.submit yield(:button_text), class: "btn btn-primary btn-block btn-#{yield(:class_text)}" %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </section>
+  <!--
   <table class="table table-condensed table-hover" id="table-users">
     <thead>
       <tr>
-        <th><%= User.human_attribute_name :name %></th>
-        <th class="center"><%= User.human_attribute_name :department %></th>
-        <% if current_user.admin? %>
-          <th class="center"><%= User.human_attribute_name :basic_time %></th>
-          <th class="center"><%= User.human_attribute_name :work_time %></th>
-        <% end %>
+        <th><%#= User.human_attribute_name :name %></th>
+        <th class="center"><%#= User.human_attribute_name :department %></th>
+        <%# if current_user.admin? %>
+          <th class="center"><%#= User.human_attribute_name :basic_time %></th>
+          <th class="center"><%#= User.human_attribute_name :work_time %></th>
+        <%# end %>
         <th></th>
       </tr>
     </thead>
 
-    <% @users.each do |user| %>
+    <%# @users.each do |user| %>
       <tr>
         <td>
-          <%= link_to user.name, user %>
+          <%#= link_to user.name, user %>
         </td>
-        <td class="center"><%= user.department.present? ? user.department : "未所属" %></td>
-        <td class="center"><%= format_basic_info(user.basic_time) %></td>
-        <td class="center"><%= format_basic_info(user.work_time) %></td>
+        <td class="center"><%#= user.department.present? ? user.department : "未所属" %></td>
+        <td class="center"><%#= format_basic_info(user.basic_time) %></td>
+        <td class="center"><%#= format_basic_info(user.work_time) %></td>
         <td class="center">
-          <% if !user.admin? %>
-            <%= link_to "基本情報編集", edit_basic_info_user_path(user), remote: true, class: "btn btn-success" %>
-            <%= link_to "削除", user, method: :delete,
+          <%# if !user.admin? %>
+            <%#= link_to "基本情報編集", edit_basic_info_user_path(user), remote: true, class: "btn btn-success" %>
+            <%#= link_to "削除", user, method: :delete,
                 data: { confirm: "削除してよろしいですか？" }, class: "btn btn-danger" %>
-          <% end %>
+          <%# end %>
         </td>
       </tr>
-    <% end %>
+    <%# end %>
   </table>
+  !-->
+  
   <%= will_paginate %>
 </div>
 

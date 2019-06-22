@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   root 'static_pages#top'
   get '/signup', to: 'users#new'
   get '/users/on_duty', to: 'users#duty'
+  post '/users/import', to: 'users#import'
   
   # ログイン機能
   get    '/login', to: 'sessions#new'
@@ -19,4 +20,7 @@ Rails.application.routes.draw do
     resources :attendances, only: :update
   end
 
+  resources 'users', only: :index do
+    collection { post :import }
+  end
 end

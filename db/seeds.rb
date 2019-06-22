@@ -3,6 +3,8 @@
 User.create!(name: "管理者",
              email: "sample@email.com",
              department: "総務部",
+             employee_number: "1",	
+             uid: "atem",
              password: "password",
              password_confirmation: "password",
              admin: true)
@@ -10,10 +12,12 @@ User.create!(name: "管理者",
 User.create!(name: "上長",
              email: "sample-0@email.com",
              department: "総務部",
+             employee_number: "3",	
+             uid: "seto",
              password: "password",
              password_confirmation: "password",
              superior: true)
-
+=begin
 60.times do |n|
   name  = Faker::Name.name
   email = "sample-#{n+1}@email.com"
@@ -25,3 +29,4 @@ User.create!(name: "上長",
                password: password,
                password_confirmation: password)
 end
+=end
