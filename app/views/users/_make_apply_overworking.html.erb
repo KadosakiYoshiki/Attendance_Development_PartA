@@ -1,0 +1,71 @@
+<% provide(:class_text, 'make-apply-overworking') %>
+<% provide(:button_text, '変更を送信する') %>
+
+<div class="modal-dialog modal-lg modal-dialog-center">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h3 class="modal-title">【残業申請】</h3>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+          <table class="table table-bordered table-condensed table-hover" id="table-attendances">
+            <thead>
+              <tr>
+                <th>日付</th>
+                <th>曜日</th>
+                <th>終了予定時間</th>
+                <th>翌日</th>
+                <th>業務処理内容</th>
+                <th>指示者確認印</th>
+              </tr>
+            </thead>
+            
+            <%= form_with(model: @overtime, url: send_apply_overworking_user_path(@user), local: true, method: :patch) do |f| %>
+              <tbody>
+                <tr>
+                  <td><%= l(@attendance.worked_on, format: :short) %></td>
+                  <td class="<%= calender_color(@attendance.worked_on.wday) %>"><%= $days_of_the_week[@attendance.worked_on.wday] %></td>
+                  <td><%= f.time_select :end_overtime, class: "form-control" %></td>
+                  <td><%= f.check_box :next_day, class: "form-control" %></td>
+                  <td><%= f.text_field :permit_note, class: "form-control" %></td>
+                  <td><%= f.text_field :permit, class: "form-control" %></td>
+                </tr>
+              </tbody>
+              <div class="center">
+                <%= f.submit yield(:button_text), class: "btn btn-primary btn-#{yield(:class_text)}" %>
+              </div>
+            <% end %>
+          </table>
+<!--
+          <%#= form_with(model: @user, url: update_basic_info_user_path(@user), local: true, method: :patch) do |f| %>
+            <%#= render 'shared/error_messages', object: @user %>
+
+            <%#= f.label :name, class: "label-#{yield(:class_text)}" %>
+            <p><%#= @user.name %></p>
+
+            <%#= f.label :department, class: "label-#{yield(:class_text)}" %>
+            <%#= f.text_field :department, class: "form-control" %>
+
+            <%#= f.label :basic_time, class: "label-#{yield(:class_text)}" %>
+            <%#= f.time_field :basic_time, class: "form-control" %>
+
+            <%#= f.label :work_time, class: "label-#{yield(:class_text)}" %>
+            <%#= f.time_field :work_time, class: "form-control" %>
+
+            <div class="center">
+              <%#= f.submit yield(:button_text), class: "btn btn-primary btn-#{yield(:class_text)}" %>
+              <button type="button" class="btn btn-default btn-<%#= yield(:class_text) %>" data-dismiss="modal">
+                キャンセル
+              </button>
+            </div>
+          <%# end %>
+!-->          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
