@@ -16,11 +16,11 @@ Rails.application.routes.draw do
       patch 'update_basic_info'
       get 'attendances/edit_one_month'
       patch 'attendances/update_one_month'
-      get 'make_apply_overworking'
+      get 'new_apply_overworking'
       patch 'send_apply_overworking'
     end
     resources :attendances, only: :update
-    resources :overworking
+    resources :overtimes
   end
 
   resources 'users', only: :index do

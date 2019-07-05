@@ -1,4 +1,4 @@
-<% provide(:class_text, 'make-apply-overworking') %>
+<% provide(:class_text, 'new-user-overtimes') %>
 <% provide(:button_text, '変更を送信する') %>
 
 <div class="modal-dialog modal-lg modal-dialog-center">
@@ -12,34 +12,36 @@
     <div class="modal-body">
       <div class="row">
         <div class="col-md-6 col-md-offset-3">
-          <table class="table table-bordered table-condensed table-hover" id="table-attendances">
-            <thead>
-              <tr>
-                <th>日付</th>
-                <th>曜日</th>
-                <th>終了予定時間</th>
-                <th>翌日</th>
-                <th>業務処理内容</th>
-                <th>指示者確認印</th>
-              </tr>
-            </thead>
-            
-            <%= form_with(model: @overtime, url: send_apply_overworking_user_path(@user), local: true, method: :patch) do |f| %>
-              <tbody>
-                <tr>
-                  <td><%= l(@attendance.worked_on, format: :short) %></td>
-                  <td class="<%= calender_color(@attendance.worked_on.wday) %>"><%= $days_of_the_week[@attendance.worked_on.wday] %></td>
-                  <td><%= f.time_select :end_overtime, class: "form-control" %></td>
-                  <td><%= f.check_box :next_day, class: "form-control" %></td>
-                  <td><%= f.text_field :permit_note, class: "form-control" %></td>
-                  <td><%= f.text_field :permit, class: "form-control" %></td>
-                </tr>
-              </tbody>
-              <div class="center">
-                <%= f.submit yield(:button_text), class: "btn btn-primary btn-#{yield(:class_text)}" %>
-              </div>
-            <% end %>
-          </table>
+　<%= form_with(model: @overtime, url: user_overtimes_path, local: true) do |f| %>
+    <%= render 'shared/error_messages', object: @overtime %>
+    <%= f.hidden_field :applied_on, value: @attendance.worked_on %>
+    <table class="table table-bordered table-condensed table-hover" id="table-attendances">
+      <thead>
+        <tr>
+          <th>日付</th>
+          <th>曜日</th>
+          <th><%= f.label :end_overtime, class: "label-#{yield(:class_text)}" %></th>
+          <th><%= f.label :next_day, class: "label-#{yield(:class_text)}" %></th>
+          <th><%= f.label :business_content, class: "label-#{yield(:class_text)}" %></th>
+          <th><%= f.label :superior_id, class: "label-#{yield(:class_text)}" %></th>
+        </tr>
+      </thead>
+    
+      <tbody>
+  　　    <tr>
+          <td><%= l(@attendance.worked_on, format: :short) %></td>
+          <td class="<%= calender_color(@attendance.worked_on.wday) %>"><%= $days_of_the_week[@attendance.worked_on.wday] %></td>
+          <td><%= f.time_select :end_overtime, default: @attendance.worked_on, class: "form-control" %></td>
+          <td><%= f.check_box :next_day, class: "form-control" %></td>
+          <td><%= f.text_field :business_content, class: "form-control" %></td>
+          <td><%= f.collection_select :superior_id, User.where(superior: true), :id, :name, class: "form-control" %></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="center">
+      <%= f.submit yield(:button_text), class: "btn btn-primary btn-block btn-#{yield(:class_text)}" %>
+    </div>
+  <% end %>
 <!--
           <%#= form_with(model: @user, url: update_basic_info_user_path(@user), local: true, method: :patch) do |f| %>
             <%#= render 'shared/error_messages', object: @user %>

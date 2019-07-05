@@ -3,6 +3,7 @@ ja:
     models:
       user: ユーザー
       attendance: 勤怠
+      overtime: 残業
     attributes:
         user:
           id: ID
@@ -26,3 +27,9 @@ ja:
           finished_at: 退勤時間
           note: 備考
           user: ユーザーID
+        overtime:
+            new:
+              end_overtime: 終了予定時間
+              next_day: 翌日
+              business_content: 業務処理内容
+              permit_note: 指示者確認印

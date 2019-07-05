@@ -96,7 +96,7 @@ class UsersController < ApplicationController
     redirect_to users_url
   end
   
-  def make_apply_overworking
+  def new_apply_overworking
     @attendance = Attendance.find(params[:format])
   end
   
