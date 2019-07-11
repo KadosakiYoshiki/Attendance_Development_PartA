@@ -5,8 +5,7 @@ class UsersController < ApplicationController
   before_action :admin_user, only: [:index, :destroy, :edit_basic_info, :update_basic_info]
   before_action :admin_or_correct_user, only: :show
   before_action :set_one_month, only: :show
-  #before_action :set_day, only: :make_apply_overworking
-  
+
   def index
     @users = User.search(params[:search]).paginate(page: params[:page])
   end
@@ -17,7 +16,14 @@ class UsersController < ApplicationController
   end
   
   def show
+    @approval = Approval.new
     @worked_sum = @attendances.where.not(started_at: nil).count
+    respond_to do |format|
+      format.html
+      format.csv do
+        send_data render_to_string, filename: "#{@user.name + l(@first_day, format: :middle)}勤怠情報.csv", type: :csv
+      end
+    end
   end
   
   def new

@@ -30,13 +30,21 @@ class AttendancesController < ApplicationController
   end
   
   def update_one_month
+    dates_on = []
     ActiveRecord::Base.transaction do # トランザクションを開始します
       attendances_params.each do |id, item|
-        attendance = Attendance.find(id)
-        attendance.update_attributes!(item)
+        if item[:superior_id].present? 
+          attendance = Attendance.find(id)
+          attendance.update_attributes!(item)
+        elsif item[:started_at].present? || item[:finished_at].present? || item[:note].present?
+          dates_on.push(l(Attendance.find(id).worked_on, format: :short))
+        end
       end
     end
     flash[:success] = "1ヶ月分の勤怠情報を更新しました。"
+    if dates_on.count > 0
+      flash[:danger] = "#{dates_on.join(', ')}の上長を選択してください。"
+    end
     redirect_to user_url(date: params[:date])
     
   rescue ActiveRecord::RecordInvalid # トランザクションによるエラーの分岐
@@ -47,6 +55,6 @@ class AttendancesController < ApplicationController
   private
     # 1ヶ月分の勤怠情報を扱います。
     def attendances_params
-      params.require(:user).permit(attendances: [:started_at, :finished_at, :note])[:attendances]
+      params.require(:user).permit(attendances: [:started_at, :finished_at, :note, :superior_id])[:attendances]
     end
 end

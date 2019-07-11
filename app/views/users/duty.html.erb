@@ -6,7 +6,7 @@
   <table class="table table-condensed table-hover" id="table-users">
     <thead>
       <tr>
-        <th>社員番号（user_id）</th>
+        <th>社員番号</th>
         <th>名前</th>
       </tr>
     </thead>
@@ -14,7 +14,7 @@
     <% @dutys.each do |duty| %>
       <tr>
         <td><%= duty.user_id %></td>
-        <td><%= @users.find_by(id: duty.user_id).name %></td>
+        <td><%= @users.find_by(id: duty.employee_number).name %></td>
       </tr>
     <% end %>
   </table>

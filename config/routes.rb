@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  get 'approvals/create'
+
   root 'static_pages#top'
   get '/signup', to: 'users#new'
   get '/users/on_duty', to: 'users#duty'
@@ -16,11 +18,11 @@ Rails.application.routes.draw do
       patch 'update_basic_info'
       get 'attendances/edit_one_month'
       patch 'attendances/update_one_month'
-      get 'new_apply_overworking'
-      patch 'send_apply_overworking'
     end
     resources :attendances, only: :update
     resources :overtimes
+    resources :approvals
+    resources :stamps
   end
 
   resources 'users', only: :index do
