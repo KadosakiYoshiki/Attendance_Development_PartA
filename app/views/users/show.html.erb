@@ -24,6 +24,12 @@
 </div>
 
 <div class="btn-users-show">
+  <%= link_to "【残業申請のお知らせ】#{Overtime.where(superior_id: @user.id, status_id: '申請中').count}件", overtimes_edit_overtimes_user_path(@user), remote: true, "data-toggle" => "modal", "data-target" => "permit-overtime" %>
+  <%= link_to "【勤怠変更申請のお知らせ】#{Attendance.where(superior_id: @user.id).count}件", attendances_edit_attendances_user_path(@user), remote: true, "data-toggle" => "modal", "data-target" => "permit-attendance" %>
+  <%= link_to "【所属長承認申請のお知らせ】#{Approval.where(superior_id: @user.id).count}件", user_approvals_path(@user), remote: true, "data-toggle" => "modal", "data-target" => "permit-approval"  %>
+</div>
+
+<div class="btn-users-show">
   <%= link_to "1ヶ月の勤怠編集へ", attendances_edit_one_month_user_path(date: @first_day), class: "btn btn-success" %>
   <%= link_to "CSV出力", user_path(format: :csv), class: "btn btn-primary" %>
 </div>
@@ -94,3 +100,6 @@
 
 <!--モーダルウインドウ表示-->
 <div id="new-user-overtimes" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+<div id="permit-approval" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+<div id="permit-attendance" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+<div id="permit-overtime" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>

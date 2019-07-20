@@ -10,13 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190711045943) do
+ActiveRecord::Schema.define(version: 20190719142911) do
 
   create_table "approvals", force: :cascade do |t|
     t.integer "user_id"
     t.date "month"
     t.integer "superior_id"
-    t.integer "status_id", default: 1
+    t.integer "status_id", default: 2, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_approvals_on_user_id"
@@ -27,21 +27,24 @@ ActiveRecord::Schema.define(version: 20190711045943) do
     t.datetime "started_at"
     t.datetime "finished_at"
     t.string "note"
+    t.integer "status_id", default: 2, null: false
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "superior_id"
+    t.datetime "applying_started_at"
+    t.datetime "applying_finished_at"
     t.index ["user_id"], name: "index_attendances_on_user_id"
   end
 
   create_table "overtimes", force: :cascade do |t|
     t.integer "user_id"
     t.date "applied_on"
-    t.datetime "end_overtime"
+    t.time "end_overtime"
     t.string "business_content"
     t.integer "superior_id"
     t.string "permit_note"
-    t.boolean "permit"
+    t.integer "status_id", default: 2, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_overtimes_on_user_id"
@@ -66,14 +69,14 @@ ActiveRecord::Schema.define(version: 20190711045943) do
     t.string "remember_digest"
     t.boolean "admin", default: false
     t.string "department"
-    t.datetime "basic_time", default: "2019-07-11 23:00:00"
-    t.datetime "work_time", default: "2019-07-11 22:30:00"
+    t.datetime "basic_time", default: "2019-07-18 23:00:00"
+    t.datetime "work_time", default: "2019-07-18 22:30:00"
     t.boolean "superior", default: false
     t.integer "employee_number"
     t.string "uid"
-    t.time "designated_work_start_time"
-    t.time "designated_work_end_time"
-    t.time "basic_work_time"
+    t.time "designated_work_start_time", default: "2000-01-01 00:00:00"
+    t.time "designated_work_end_time", default: "2000-01-01 09:00:00"
+    t.time "basic_work_time", default: "2000-01-01 23:00:00"
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 

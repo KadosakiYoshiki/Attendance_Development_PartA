@@ -3,11 +3,11 @@ class CreateOvertimes < ActiveRecord::Migration[5.1]
     create_table :overtimes do |t|
       t.integer :user_id
       t.date :applied_on
-      t.datetime :end_overtime
+      t.time :end_overtime
       t.string :business_content 
       t.integer :superior_id
       t.string :permit_note
-      t.boolean :permit
+      t.integer :status_id, default: 2, null: false
       t.references :user, foreign_key: true
 
       t.timestamps

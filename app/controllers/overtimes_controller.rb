@@ -1,11 +1,14 @@
 class OvertimesController < ApplicationController
 
-  def update
-    if Overtime.find_by(id: @user.id, applied_on: @attendance.worked_on)
-    
-    else # 残業申請されてるテーブルが存在しないなら新規作成する
-      Overtime.create(applied_on: params, end_overtime: params, permit_note: params)
+  def update_overtimes
+
+    update_overtimes_params.each do |id, item|
+      if item[:permit] == '1'
+        overtime = Overtime.find(id)
+        overtime.update_attributes!(item)
+      end
     end
+    flash[:success] = "残業申請を処理しました。"
     
     redirect_to users_url
   end
@@ -33,14 +36,19 @@ class OvertimesController < ApplicationController
       redirect_to users_url
     end
   end
-  
-  def index
-  
+
+  def edit_overtimes
+    @overtimes = Overtime.where(superior_id: params[:id], status_id: 2).order(:user_id, :applied_on)
+    @users = User.all
   end
   
   private
   
     def overtime_params
       params.require(:overtime).permit(:applied_on, :end_overtime, :business_content, :superior_id)
+    end
+    
+    def update_overtimes_params
+      params.require(:overtime).permit(overtimes: [:status_id, :permit])[:overtimes]
     end
 end

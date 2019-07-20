@@ -10,6 +10,10 @@ class Attendance < ApplicationRecord
   validate :started_at_than_finished_at_fast_if_invalid
   # 未来の日付は編集不可
   validate :cannot_config_day_at_future
+  
+  enum status_id: { "なし" => 1, "申請中" => 2, "承認" => 3, "否認" => 4 } 
+  validates_acceptance_of :next_day, allow_nil: true, on: :update_one_month
+  validates_acceptance_of :permit, allow_nil: true, on: :update_attendances
 
   def finished_at_is_invalid_without_a_started_at
     errors.add(:started_at, "が必要です") if started_at.blank? && finished_at.present?

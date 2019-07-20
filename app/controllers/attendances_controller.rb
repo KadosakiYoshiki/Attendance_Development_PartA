@@ -5,7 +5,7 @@ class AttendancesController < ApplicationController
   before_action :set_one_month, only: :edit_one_month
   
   UPDATE_ERROR_MSG = "勤怠登録に失敗しました。やり直してください。"
-
+  
   def update
     @user = User.find(params[:user_id])
     @attendance = Attendance.find(params[:id])
@@ -25,6 +25,15 @@ class AttendancesController < ApplicationController
     end
     redirect_to @user
   end
+  
+  def edit_attendances
+    @attendances = Attendance.where(superior_id: params[:id], status_id: 2).order(:user_id, :worked_on)
+    @users = User.all
+  end
+  
+  def update_attendances
+    
+  end
 
   def edit_one_month
   end
@@ -35,6 +44,9 @@ class AttendancesController < ApplicationController
       attendances_params.each do |id, item|
         if item[:superior_id].present? 
           attendance = Attendance.find(id)
+          if item[:next_day] == '1'
+            item[:finished_at] = item[:finished_at].in_time_zone + 1.days
+          end
           attendance.update_attributes!(item)
         elsif item[:started_at].present? || item[:finished_at].present? || item[:note].present?
           dates_on.push(l(Attendance.find(id).worked_on, format: :short))
@@ -55,6 +67,6 @@ class AttendancesController < ApplicationController
   private
     # 1ヶ月分の勤怠情報を扱います。
     def attendances_params
-      params.require(:user).permit(attendances: [:started_at, :finished_at, :note, :superior_id])[:attendances]
+      params.require(:user).permit(attendances: [:started_at, :finished_at, :next_day, :note, :superior_id])[:attendances]
     end
 end
