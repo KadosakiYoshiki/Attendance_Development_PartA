@@ -22,17 +22,17 @@
               <td><%= l(day.worked_on, format: :short) %></td>
               <td class="<%= calender_color(day.worked_on.wday) %>"><%= $days_of_the_week[day.worked_on.wday] %></td>
               <% if Date.current < day.worked_on %>
-                <td><%= attendance.time_field :started_at, readonly: true, class: "form-control" %></td>
-                <td><%= attendance.time_field :finished_at, readonly: true, class: "form-control" %></td>
+                <td><%= attendance.time_select :applying_started_at, include_blank: true, disabled: true, class: "form-control" %></td>
+                <td><%= attendance.time_select :applying_finished_at, include_blank: true, disabled: true, class: "form-control" %></td>
                 <td></td>
               <% else %>
-                <td><%= attendance.time_field :started_at, class: "form-control" %></td>
-                <td><%= attendance.time_field :finished_at, class: "form-control" %></td>
+                <td><%= attendance.time_select :applying_started_at, include_blank: true, selected: day.started_at, class: "form-control" %></td>
+                <td><%= attendance.time_select :applying_finished_at, include_blank: true, selected: day.finished_at, class: "form-control" %></td>
                 <td><%= attendance.check_box :next_day %></td>
               <% end %>
               <td>
                 <% if day.started_at.present? && day.finished_at.present? %>
-                  <%= working_times(day.started_at, day.finished_at) %>
+                  <%= working_times(day.started_at, day.finished_at, day.next_day) %>
                 <% end %>
               </td>
               <% if Date.current < day.worked_on %>
@@ -40,7 +40,7 @@
                 <td></td>
               <% else %>
                 <td><%= attendance.text_field :note, class: "form-control" %></td>
-                <td><%= attendance.collection_select :superior_id, User.where(superior: true), :id, :name, :include_blank => true, class: "form-control" %></td>
+                <td><%= attendance.collection_select :superior_id, User.where(superior: true), :id, :name, :include_blank => true, :selected => 0, class: "form-control" %></td>
               <% end %>
             </tr>
           <% end %>

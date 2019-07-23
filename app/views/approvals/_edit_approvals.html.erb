@@ -1,0 +1,57 @@
+<% provide(:class_text, 'permit-approval') %>
+<% provide(:button_text, '変更を送信する') %>
+
+<div class="modal-dialog modal-lg modal-dialog-center">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h3 class="modal-title">【1ヶ月の勤怠申請有無】</h3>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-12">
+          <% if Approval.where(superior_id: params[:id], status_id: '申請中').present? %>
+            <%= form_with(model: @approvals, url: approvals_update_approvals_user_path, local: true, method: :patch) do |f| %>
+              <% @users.each do |user| %>
+                <% if Approval.where(user_id: user.id).present? %>
+                  <h2>【<%= user.name %>からの申請】</h2>
+                  <div>
+                    <table class="table table-bordered table-condensed table-hover" id="table-attendances">
+                      <thead>
+                        <tr>
+                          <th>月</th>
+                          <th>指示者確認印</th>
+                          <th>変更</th>
+                          <th>勤怠を確認する</th>
+                        </tr>
+                      </thead>
+                    
+                      <tbody>
+                        <% @approvals = Approval.where(user_id: user.id, status_id: '申請中') %>
+                        <% @approvals.each do |day| %>
+                          <%= f.fields_for "approvals[]", day do |approval| %>
+                      　　    <tr>
+                              <td><%= l(day.month, format: :middle) %></td>
+                              <td><%= approval.select :status_id, Approval.status_ids.keys.to_a, { include_blank: true }, class: "form-control" %></td>
+                              <td><%= approval.check_box :permit %></td>
+                              <td><%= link_to "確認", user_path(id: user, date: day.month), class: "btn btn-primary", :target => "_blank" %></td>
+                            </tr>
+                          <% end %>
+                        <% end %>
+                      </tbody>
+                    </table>
+                  </div>
+                <% end %>
+              <% end %>
+              <%= f.submit "変更を送信する", class: "btn btn-lg btn-primary" %>
+            <% end %>
+          <% else %>
+            <h2>1ヶ月の勤怠申請はありません。</h2>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

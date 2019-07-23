@@ -16,7 +16,9 @@ class UsersController < ApplicationController
   end
   
   def show
-    @approval = Approval.new
+    unless @approval = Approval.find_by(user_id: @user.id, month: @first_day)
+      @approval = Approval.new(user_id: @user.id, month: @first_day)
+    end
     @worked_sum = @attendances.where.not(started_at: nil).count
     respond_to do |format|
       format.html

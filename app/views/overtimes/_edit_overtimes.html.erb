@@ -42,11 +42,11 @@
                               <td class="<%= calender_color(day.applied_on.wday) %>"><%= $days_of_the_week[day.applied_on.wday] %></td>
                               <td><%= l(day.end_overtime, format: :time) %></td>
                               <td><%= l(user.designated_work_end_time, format: :time)%></td>
-                              <td><%= str_times = working_times(user.designated_work_end_time, day.end_overtime) %></td>
+                              <td><%= str_times = working_times(user.designated_work_end_time, day.end_overtime, day.next_day) %></td>
                               <td><%= day.business_content %></td>
                               <td><%= overtime.select :status_id, Overtime.status_ids.keys.to_a, { include_blank: true }, class: "form-control" %></td>
                               <td><%= overtime.check_box :permit %></td>
-                              <td><%= link_to "確認", user, class: "btn btn-primary" %></td>
+                              <td><%= link_to "確認", user_path(id: user, date: day.applied_on.beginning_of_month), class: "btn btn-primary", :target => "_blank" %></td>
                             </tr>
                           <% end %>
                         <% end %>

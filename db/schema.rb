@@ -16,7 +16,7 @@ ActiveRecord::Schema.define(version: 20190719142911) do
     t.integer "user_id"
     t.date "month"
     t.integer "superior_id"
-    t.integer "status_id", default: 2, null: false
+    t.integer "status_id", default: 1, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_approvals_on_user_id"
@@ -24,16 +24,16 @@ ActiveRecord::Schema.define(version: 20190719142911) do
 
   create_table "attendances", force: :cascade do |t|
     t.date "worked_on"
-    t.datetime "started_at"
-    t.datetime "finished_at"
+    t.time "started_at"
+    t.time "finished_at"
     t.string "note"
-    t.integer "status_id", default: 2, null: false
+    t.integer "status_id", default: 1, null: false
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "superior_id"
-    t.datetime "applying_started_at"
-    t.datetime "applying_finished_at"
+    t.time "applying_started_at"
+    t.time "applying_finished_at"
     t.index ["user_id"], name: "index_attendances_on_user_id"
   end
 
@@ -44,7 +44,7 @@ ActiveRecord::Schema.define(version: 20190719142911) do
     t.string "business_content"
     t.integer "superior_id"
     t.string "permit_note"
-    t.integer "status_id", default: 2, null: false
+    t.integer "status_id", default: 1, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_overtimes_on_user_id"
@@ -69,8 +69,8 @@ ActiveRecord::Schema.define(version: 20190719142911) do
     t.string "remember_digest"
     t.boolean "admin", default: false
     t.string "department"
-    t.datetime "basic_time", default: "2019-07-18 23:00:00"
-    t.datetime "work_time", default: "2019-07-18 22:30:00"
+    t.datetime "basic_time", default: "2019-07-20 23:00:00"
+    t.datetime "work_time", default: "2019-07-20 22:30:00"
     t.boolean "superior", default: false
     t.integer "employee_number"
     t.string "uid"

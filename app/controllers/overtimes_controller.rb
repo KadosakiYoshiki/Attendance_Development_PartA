@@ -27,6 +27,8 @@ class OvertimesController < ApplicationController
       @overtime.end_overtime += 1.days
     end
     @overtime.user_id = params[:user_id]
+    @overtime.status_id = '申請中'
+    
     
     if @overtime.save
       flash[:success] = "残業を申請しました。承認をお待ち下さい。"
@@ -38,14 +40,14 @@ class OvertimesController < ApplicationController
   end
 
   def edit_overtimes
-    @overtimes = Overtime.where(superior_id: params[:id], status_id: 2).order(:user_id, :applied_on)
+    @overtimes = Overtime.where(superior_id: params[:id], status_id: '申請中').order(:user_id, :applied_on)
     @users = User.all
   end
   
   private
   
     def overtime_params
-      params.require(:overtime).permit(:applied_on, :end_overtime, :business_content, :superior_id)
+      params.require(:overtime).permit(:applied_on, :end_overtime, :next_day, :business_content, :superior_id)
     end
     
     def update_overtimes_params

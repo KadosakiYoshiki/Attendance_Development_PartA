@@ -27,12 +27,31 @@ class AttendancesController < ApplicationController
   end
   
   def edit_attendances
-    @attendances = Attendance.where(superior_id: params[:id], status_id: 2).order(:user_id, :worked_on)
+    @attendances = Attendance.where(superior_id: params[:id], status_id: '申請中').order(:user_id, :worked_on)
     @users = User.all
   end
   
   def update_attendances
+    ActiveRecord::Base.transaction do # トランザクションを開始します
+      update_attendances_params.each do |id, item|
+        if ActiveRecord::Type::Boolean.new.cast(item[:permit])
+          attendance = Attendance.find(id)
+          attendance.update(status_id: item[:status_id])
+          if attendance.status_id == '承認'
+            attendance.update_attributes!(started_at: attendance.applying_started_at,
+                                          finished_at: attendance.applying_finished_at)
+          end
+          
+          attendance.update_attributes!(applying_started_at: nil, applying_finished_at: nil)
+        end
+      end
+      flash[:success] = "勤怠修正申請を処理しました。"
+      redirect_to users_url
+    end
     
+  rescue ActiveRecord::RecordInvalid # トランザクションによるエラーの分岐
+    flash[:danger] = "エラーがあった為、更新をキャンセルしました。"
+    redirect_to attendances_edit_one_month_user_url(date: params[:date])
   end
 
   def edit_one_month
@@ -44,18 +63,26 @@ class AttendancesController < ApplicationController
       attendances_params.each do |id, item|
         if item[:superior_id].present? 
           attendance = Attendance.find(id)
-          if item[:next_day] == '1'
-            item[:finished_at] = item[:finished_at].in_time_zone + 1.days
-          end
-          attendance.update_attributes!(item)
-        elsif item[:started_at].present? || item[:finished_at].present? || item[:note].present?
+          attendance.update_attributes!(applying_started_at:  Time.zone.local(attendance.worked_on.year, 
+                                                                              attendance.worked_on.month, 
+                                                                              attendance.worked_on.day, 
+                                                                              params[:user][:attendances][id]["applying_started_at(4i)"].to_i, 
+                                                                              params[:user][:attendances][id]["applying_started_at(5i)"].to_i),
+                                        applying_finished_at: Time.zone.local(attendance.worked_on.year, 
+                                                                              attendance.worked_on.month, 
+                                                                              attendance.worked_on.day, 
+                                                                              params[:user][:attendances][id]["applying_finished_at(4i)"].to_i, 
+                                                                              params[:user][:attendances][id]["applying_finished_at(5i)"].to_i),
+                                        status_id: '申請中',
+                                        note: item[:note],
+                                        next_day: ActiveRecord::Type::Boolean.new.cast(item[:next_day]),
+                                        superior_id: item[:superior_id])
           dates_on.push(l(Attendance.find(id).worked_on, format: :short))
         end
       end
     end
-    flash[:success] = "1ヶ月分の勤怠情報を更新しました。"
     if dates_on.count > 0
-      flash[:danger] = "#{dates_on.join(', ')}の上長を選択してください。"
+      flash[:success] = "#{dates_on.join(', ')}の勤怠修正を申請しました。承認をお待ち下さい。"
     end
     redirect_to user_url(date: params[:date])
     
@@ -67,6 +94,10 @@ class AttendancesController < ApplicationController
   private
     # 1ヶ月分の勤怠情報を扱います。
     def attendances_params
-      params.require(:user).permit(attendances: [:started_at, :finished_at, :next_day, :note, :superior_id])[:attendances]
+      params.require(:user).permit(attendances: [:applying_started_at, :applying_finished_at, :next_day, :note, :superior_id])[:attendances]
+    end
+    
+    def update_attendances_params
+      params.require(:attendance).permit(attendances: [:status_id, :permit])[:attendances]
     end
 end

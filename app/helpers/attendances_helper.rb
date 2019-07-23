@@ -11,7 +11,7 @@ module AttendancesHelper
   end
   
   # 出勤時間と退勤時間を受け取り、在社時間を計算して返します。
-  def working_times(start, finish)
-    format("%.2f", (((finish - start) / 60) / 60.0))
+  def working_times(start, finish, next_day)
+    format("%.2f", (((finish - start + (next_day ? 86400 : 0)) / 60) / 60.0))
   end
 end
