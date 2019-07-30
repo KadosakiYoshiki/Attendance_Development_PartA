@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190719142911) do
+ActiveRecord::Schema.define(version: 20190728115905) do
 
   create_table "approvals", force: :cascade do |t|
     t.integer "user_id"
@@ -22,19 +22,49 @@ ActiveRecord::Schema.define(version: 20190719142911) do
     t.index ["user_id"], name: "index_approvals_on_user_id"
   end
 
+  create_table "attendancelogs", force: :cascade do |t|
+    t.date "attendance_date"
+    t.datetime "first_started_at"
+    t.datetime "first_finished_at"
+    t.datetime "latest_started_at"
+    t.datetime "latest_finished_at"
+    t.integer "superior_id"
+    t.date "approvaled_at"
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_attendancelogs_on_user_id"
+  end
+
   create_table "attendances", force: :cascade do |t|
     t.date "worked_on"
-    t.time "started_at"
-    t.time "finished_at"
+    t.datetime "started_at"
+    t.datetime "finished_at"
+    t.datetime "first_started_at"
+    t.datetime "first_finished_at"
+    t.boolean "next_day", default: false, null: false
     t.string "note"
     t.integer "status_id", default: 1, null: false
+    t.datetime "end_overtime"
+    t.string "business_content"
+    t.integer "superior_id_for_overtime"
+    t.integer "status_id_overtime", default: 1, null: false
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "superior_id"
-    t.time "applying_started_at"
-    t.time "applying_finished_at"
+    t.datetime "applying_started_at"
+    t.datetime "applying_finished_at"
+    t.boolean "next_day_for_overtime", default: false, null: false
     t.index ["user_id"], name: "index_attendances_on_user_id"
+  end
+
+  create_table "centers", force: :cascade do |t|
+    t.integer "number", null: false
+    t.string "name", null: false
+    t.string "attendance_type", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "overtimes", force: :cascade do |t|
@@ -69,13 +99,13 @@ ActiveRecord::Schema.define(version: 20190719142911) do
     t.string "remember_digest"
     t.boolean "admin", default: false
     t.string "department"
-    t.datetime "basic_time", default: "2019-07-20 23:00:00"
-    t.datetime "work_time", default: "2019-07-20 22:30:00"
+    t.datetime "basic_time", default: "2019-07-29 23:00:00"
+    t.datetime "work_time", default: "2019-07-29 22:30:00"
     t.boolean "superior", default: false
     t.integer "employee_number"
     t.string "uid"
-    t.time "designated_work_start_time", default: "2000-01-01 00:00:00"
-    t.time "designated_work_end_time", default: "2000-01-01 09:00:00"
+    t.datetime "designated_work_start_time", default: "2019-07-30 00:00:00"
+    t.datetime "designated_work_end_time", default: "2019-07-30 09:00:00"
     t.time "basic_work_time", default: "2000-01-01 23:00:00"
     t.index ["email"], name: "index_users_on_email", unique: true
   end

@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  has_many :attendancelogs, dependent: :destroy
   has_many :attendances, dependent: :destroy
   has_many :overtimes, dependent: :destroy
   has_many :approvals, dependent: :destroy

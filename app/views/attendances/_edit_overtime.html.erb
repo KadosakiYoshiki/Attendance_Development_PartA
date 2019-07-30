@@ -1,0 +1,49 @@
+<% provide(:class_text, 'apply-overtime') %>
+<% provide(:button_text, '変更を送信する') %>
+
+<div class="modal-dialog modal-lg modal-dialog-center">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h3 class="modal-title">【残業申請】</h3>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+        　<%= form_with(model: @attendance, url: update_overtime_user_attendance_path, local: true) do |f| %>
+            <%= render 'shared/error_messages', object: @attendance %>
+            <%#= f.hidden_field :applied_on, value: @attendance.worked_on %>
+            <table class="table table-bordered table-condensed table-hover" id="table-attendances">
+              <thead>
+                <tr>
+                  <th>日付</th>
+                  <th>曜日</th>
+                  <th><%= f.label :end_overtime, class: "label-#{yield(:class_text)}" %></th>
+                  <th><%= f.label :next_day, class: "label-#{yield(:class_text)}" %></th>
+                  <th><%= f.label :business_content, class: "label-#{yield(:class_text)}" %></th>
+                  <th><%= f.label :superior_id, class: "label-#{yield(:class_text)}" %></th>
+                </tr>
+              </thead>
+            
+              <tbody>
+          　　    <tr>
+                  <td><%= l(@attendance.worked_on, format: :short) %></td>
+                  <td class="<%= calender_color(@attendance.worked_on.wday) %>"><%= $days_of_the_week[@attendance.worked_on.wday] %></td>
+                  <td><%= f.time_select :end_overtime, selected: @attendance.finished_at, class: "form-control" %></td>
+                  <td><%= f.check_box :next_day_for_overtime %></td>
+                  <td><%= f.text_field :business_content, class: "form-control" %></td>
+                  <td><%= f.collection_select :superior_id_for_overtime, User.where(superior: true), :id, :name, class: "form-control" %></td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="center">
+              <%= f.submit yield(:button_text), class: "btn btn-primary btn-block btn-#{yield(:class_text)}" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

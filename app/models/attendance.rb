@@ -1,5 +1,6 @@
 class Attendance < ApplicationRecord
   belongs_to :user
+  has_one :attendancelogs, dependent: :destroy
   
   validates :worked_on, presence: true
   validates :note, length: { maximum: 50 }
@@ -11,7 +12,8 @@ class Attendance < ApplicationRecord
   # 未来の日付は編集不可
   validate :cannot_config_day_at_future
   
-  enum status_id: { "なし" => 1, "申請中" => 2, "承認" => 3, "否認" => 4 } 
+  enum status_id: { "なし" => 1, "申請中" => 2, "承認" => 3, "否認" => 4 }, _prefix: true
+  enum status_id_overtime: { "なし" => 1, "申請中" => 2, "承認" => 3, "否認" => 4 }, _prefix: true
   validates_acceptance_of :next_day, allow_nil: true, on: :update_one_month
   validates_acceptance_of :permit, allow_nil: true, on: :update_attendances
 

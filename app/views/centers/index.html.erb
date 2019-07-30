@@ -1,0 +1,77 @@
+<% provide(:title, '拠点一覧') %>
+<% provide(:class_text, 'center') %>
+<% provide(:button_text, '新規作成') %>
+<% provide(:button_text_update, '更新') %>
+
+<div class="col-md-10 col-md-offset-1">
+  <h1>拠点一覧</h1>
+  
+  <table class="table table-bordered table-condensed table-hover" id="table-centers">
+    <thead>
+      <tr>
+        <th></th>
+        <th></th>
+        <th>拠点番号</th>
+        <th>拠点名</th>
+        <th>勤怠種類</th>
+      </tr>
+    </thead>
+    
+    <tbody>
+      <% @centers.each do |center| %>
+        <tr>
+          <td class="item-done clickable" data-toggle="collapse" data-target="#accordion<%= center.id %>">更新</td>
+          <td><%= link_to "削除", center, method: :delete, data: { confirm: "削除してよろしいですか？" }, class: "btn btn-primary" %></td>
+          <td><%= center.number %></td>
+          <td><%= center.name %></td>
+          <td><%= center.attendance_type %></td>          
+        </tr>
+        <%= form_with(model: @centers, url: center_path(center), local: true, method: :patch) do |f| %>
+          <tr id="accordion<%= center.id %>" class="collapse">
+            <!-- ここのstleは!importantを使ってcssファイルにした方が良い -->
+            <td colspan="2" style="padding:2px">
+              <%= f.submit yield(:button_text_update), class: "btn btn-primary btn-block btn-#{yield(:class_text)}" %>
+            </td>
+            <td><%= f.text_field :number, class: "form-control" %></td>
+            <td><%= f.text_field :name, class: "form-control" %> </td>
+            <td><%= f.text_field :attendance_type, class: "form-control" %></td>
+          </tr>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+  
+  <section>
+    <div>
+      <div>
+        
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title accordion-toggle">
+              <a data-toggle="collapse" data-parent="#accordion" href="#collapse" class="collapsed">新規拠点作成</a>
+            </h4>
+          </div>
+          <div id="collapse" class="panel-collapse collapse">
+            <div class="panel-body">
+              <%= form_with(model: @centers, url: centers_path(@user), local: true, method: :post) do |f| %>
+                <%#= render 'shared/error_messages', object: @centers %>
+                
+                <%= f.label :number, class: "label-#{yield(:class_text)}" %>
+                <%= f.text_field :number, class: "form-control" %>
+                
+                <%= f.label :name, class: "label-#{yield(:class_text)}" %>
+                <%= f.text_field :name, class: "form-control" %>
+                
+                <%= f.label :attendance_type, class: "label-#{yield(:class_text)}" %>
+                <%= f.text_field :attendance_type, class: "form-control" %>
+              
+                <%= f.submit yield(:button_text), class: "btn btn-primary btn-block btn-#{yield(:class_text)}" %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </section>
+</div>

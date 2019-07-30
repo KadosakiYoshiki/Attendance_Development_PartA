@@ -1,0 +1,40 @@
+<div class="col-md-10 col-md-offset-1">
+  <h1>勤怠ログ</h1>
+  
+  <div class="left">
+    <p>リセット</p>
+    <%#= form_tag(centers_path, :method => 'get') do %>
+      <%#= select :year, 2018..2021 %>
+      <%#= select :month, 1..12 %>
+      <%#= submit_tag '検索', :class => 'btn btn-primary' %>
+    <%# end %>
+  </div>
+  
+  <table class="table table-bordered table-condensed table-hover" id="table-centers">
+    <thead>
+      <tr>
+        <th>日付</th>
+        <th>変更前出社時間</th>
+        <th>変更前退社時間</th>
+        <th>変更後出社</th>
+        <th>変更後退社</th>
+        <th>指示者</th>
+        <th>承認日</th>
+      </tr>
+    </thead>
+    
+    <tbody>
+      <% @attendancelogs.each do |attendancelog| %>
+        <tr>
+          <td><%= l(attendancelog.attendance_date, format: :short) %></td>
+          <td><%= l(attendancelog.first_started_at, format: :time) %></td>
+          <td><%= l(attendancelog.first_finished_at, format: :time) %></td>
+          <td><%= l(attendancelog.latest_started_at, format: :time) %></td>
+          <td><%= l(attendancelog.latest_finished_at, format: :time) %></td>
+          <td><%= attendancelog.superior_id %></td>
+          <td><%= l(attendancelog.approvaled_at, format: :short) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

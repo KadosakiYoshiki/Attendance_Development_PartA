@@ -6,18 +6,85 @@ class AttendancesController < ApplicationController
   
   UPDATE_ERROR_MSG = "勤怠登録に失敗しました。やり直してください。"
   
+  ### 上長での残業申請処理 ###
+  def edit_overtimes
+    @attendances = Attendance.where(superior_id_for_overtime: params[:id], status_id_overtime: '申請中').order(:user_id, :applied_on)
+    @users = User.all
+  end
+  
+  def update_overtimes
+    update_overtimes_params.each do |id, item|
+      if ActiveRecord::Type::Boolean.new.cast(item[:permit])
+        overtime = Attendance.find(id)
+        overtime.update(status_id_overtime: item[:status_id_overtime])
+        if overtime.status_id_overtime == '否認'
+          overtime.update_attributes(end_overtime: nil, next_day_for_overtime: false)
+        end
+      end
+    end
+    flash[:success] = "残業申請を処理しました。"
+    
+    redirect_to users_url
+  end
+  
+  ### 上長、一般ユーザからの残業申請 ###
+  def edit_overtime # 残業申請作成ページ
+    @user = User.find(params[:user_id])
+    @attendance = Attendance.find(params[:id])
+  end
+  
+  def update_overtime
+    @user = User.find(params[:user_id])
+    @attendance = Attendance.find(params[:id])
+    unless @attendance.update_attributes(end_overtime: Time.zone.local(@attendance.worked_on.year, 
+                                                                       @attendance.worked_on.month, 
+                                                                       @attendance.worked_on.day, 
+                                                                       params[:attendance]["end_overtime(4i)"].to_i, 
+                                                                       params[:attendance]["end_overtime(5i)"].to_i),
+                                         status_id_overtime: '申請中',
+                                         business_content: params[:attendance][:business_content],
+                                         next_day_for_overtime: ActiveRecord::Type::Boolean.new.cast(params[:attendance][:next_day_for_overtime]),
+                                         superior_id_for_overtime: params[:attendance][:superior_id_for_overtime])
+      flash[:danger] = "申請に失敗しました。"
+    else
+      flash[:success] = "#{l(@attendance.worked_on, format: :short)}の残業を申請しました。申請をお待ち下さい。"
+    end
+    redirect_to @user
+=begin
+    @user = User.find(params[:user_id])
+    @superiors = User.where(superior: true)
+    @overtime = Overtime.new(overtime_params)
+    if (params[:overtime][:next_day] == '1')
+      @overtime.end_overtime += 1.days
+    end
+    @overtime.user_id = params[:user_id]
+    @overtime.status_id = '申請中'
+    
+    
+    if @overtime.save
+      flash[:success] = "残業を申請しました。承認をお待ち下さい。"
+      redirect_to @user
+    else
+      flash[:danger] = "申請に失敗しました。"
+      redirect_to users_url
+    end
+=end
+  end
+  
   def update
     @user = User.find(params[:user_id])
     @attendance = Attendance.find(params[:id])
     # 出勤時間が未登録であることを判定します。
     if @attendance.started_at.nil?
       if @attendance.update_attributes(started_at: Time.current.change(sec: 0))
+        @attendance.first_started_at = @attendance.started_at if @attendance.first_started_at.nil?
         flash[:info] = "おはようございます！"
       else
         flash[:danger] = UPDATE_ERROR_MSG
       end
     elsif @attendance.finished_at.nil?
       if @attendance.update_attributes(finished_at: Time.current.change(sec: 0))
+        @attendance.first_finished_at = @attendance.finished_at if @attendance.first_finished_at.nil?
         flash[:info] = "お疲れ様でした。"
       else
         flash[:danger] = UPDATE_ERROR_MSG
@@ -83,12 +150,23 @@ class AttendancesController < ApplicationController
     end
     if dates_on.count > 0
       flash[:success] = "#{dates_on.join(', ')}の勤怠修正を申請しました。承認をお待ち下さい。"
+    else
+      flash[:danger] = "最低でも1つはチェックを入れてください。"
     end
     redirect_to user_url(date: params[:date])
     
   rescue ActiveRecord::RecordInvalid # トランザクションによるエラーの分岐
     flash[:danger] = "無効な入力データがあった為、更新をキャンセルしました。"
     redirect_to attendances_edit_one_month_user_url(date: params[:date])
+  end
+  
+  def logs
+    @user = User.find(params[:id])
+    if params["date(1i)"] || params["date(2i)"]
+      @attendances = Attendance.where(status_id: '承認', user_id: @user.id, worked_on: Date.new(year: params["date(1i)"].to_i, month: params["date(2i)"].to_i).in_time_zone.all_month).order(:worked_on) 
+    else 
+      @attendances = Attendance.where(status_id: '承認', user_id: @user.id).order(:worked_on) 
+    end
   end
   
   private
@@ -99,5 +177,9 @@ class AttendancesController < ApplicationController
     
     def update_attendances_params
       params.require(:attendance).permit(attendances: [:status_id, :permit])[:attendances]
+    end
+    
+    def update_overtimes_params
+      params.require(:attendance).permit(overtimes: [:status_id_overtime, :permit])[:overtimes]
     end
 end
