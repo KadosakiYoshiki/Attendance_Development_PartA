@@ -1,49 +1,53 @@
 # coding: utf-8
 
 User.create!(name: "管理者",
-             email: "sample@email.com",
+             email: "admin@email.com",
              department: "総務部",
-             employee_number: "1",	
-             uid: "atem",
+             employee_number: "0",	
+             uid: "admin",
              password: "password",
              password_confirmation: "password",
              admin: true)
              
 User.create!(name: "上長",
-             email: "sample-0@email.com",
+             email: "superior@email.com",
              department: "総務部",
-             employee_number: "3",	
-             uid: "seto",
+             employee_number: "1",	
+             uid: "123456",
              password: "password",
              password_confirmation: "password",
              superior: true)
              
 User.create!(name: "上長その２",
-             email: "sample-1@email.com",
+             email: "superior2@email.com",
              department: "開発部",
-             employee_number: "4",
-             uid: "ago",
+             employee_number: "2",
+             uid: "abc",
              password: "password",
              password_confirmation: "password",
              superior: true)
              
-User.create!(name: "部下",
-             email: "sample-2@email.com",
-             department: "セクシーコマンドー部",
-             employee_number: "5",
-             uid: "commander",
+User.create!(name: "上長その３",
+             email: "superior3@email.com",
+             department: "開発部",
+             employee_number: "3",
+             uid: "876573",
              password: "password",
-             password_confirmation: "password")
-=begin
-60.times do |n|
+             password_confirmation: "password",
+             superior: true)
+             
+3.times do |n|
   name  = Faker::Name.name
   email = "sample-#{n+1}@email.com"
-  department = ["総務部", "人事部", "開発部", "営業部"].sample
+  department = ["総務部", "人事部", "開発部", "営業部", "フリーランス部"].sample
+  employee_number = rand(10..100)
+  uid = (0...8).map{ (65 + rand(26)).chr }.join
   password = "password"
   User.create!(name: name,
                email: email,
                department: department,
+               employee_number: employee_number,
+               uid: uid,
                password: password,
                password_confirmation: password)
 end
-=end

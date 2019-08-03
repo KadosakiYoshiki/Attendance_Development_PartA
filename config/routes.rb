@@ -27,8 +27,6 @@ Rails.application.routes.draw do
       get 'attendances/edit_overtimes'
       patch 'attendances/update_overtimes'
       get 'attendances/logs'
-      get 'overtimes/edit_overtimes'
-      patch 'overtimes/update_overtimes'
       get 'approvals/edit_approvals'
       patch 'approvals/update_approvals'
     end
@@ -38,10 +36,7 @@ Rails.application.routes.draw do
         patch 'update_overtime'
       end
     end
-    resources :overtimes
     resources :approvals
-    resources :stamps
-    resources :attendancelogs
   end
   
   resources :centers
