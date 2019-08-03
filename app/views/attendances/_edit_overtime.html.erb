@@ -7,7 +7,7 @@
       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>
-      <h3 class="modal-title">【残業申請】</h3>
+      <h3 class="modal-title center">【残業申請】</h3>
     </div>
     <div class="modal-body">
       <div class="row">
@@ -34,7 +34,7 @@
                   <td><%= f.time_select :end_overtime, selected: @attendance.finished_at, class: "form-control" %></td>
                   <td><%= f.check_box :next_day_for_overtime %></td>
                   <td><%= f.text_field :business_content, class: "form-control" %></td>
-                  <td><%= f.collection_select :superior_id_for_overtime, User.where(superior: true), :id, :name, class: "form-control" %></td>
+                  <td><%= f.collection_select :superior_id_for_overtime, User.where(superior: true).where.not(id: @user.id), :id, :name, include_blank: true, class: "form-control" %></td>
                 </tr>
               </tbody>
             </table>

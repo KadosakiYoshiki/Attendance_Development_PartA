@@ -1,0 +1,6 @@
+ja:
+  centers:
+    index:
+      number: 拠点番号
+      name: 拠点名
+      attendance_type: 勤怠種類

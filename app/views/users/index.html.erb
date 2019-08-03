@@ -24,7 +24,7 @@
       <div class="search_item">
         <%= text_field_tag 'filename',"", id: "filename", disabled: true %>
         <%= file_field_tag 'users_file', id: "file_input", style: "display: none;", onchange: "file_selected($(this));" %>
-        <%= button_tag 'ファイル選択', class: %i(btn-primary csv_input_btn), type: 'button', onclick: "$('#file_input').click();" %>
+        <%= button_tag 'ファイル選択', class: %i(csv_input_btn), type: 'button', onclick: "$('#file_input').click();" %>
       </div>
       <div>
         <button type="submit" class="btn btn-primary">CSVをインポート</button>
@@ -34,20 +34,21 @@
   
   <section>
     <div class="panel-group" id="accordion">
-      
       <% @users.each do |user| %>
-        
+      <div class="under">  
         <!-- とっても恥ずかしいコード 
             ↓あまりにも不格好すぎるため代替案急務
         !-->
         <% @user = user %>
         
-        <%= link_to user.name, user %>
-        <%= "|" %><%= link_to "削除", user, method: :delete, data: { confirm: "削除してよろしいですか？" }, class: "btn btn-primary" %>
+        <%= user.name %>
+        <% if !user.admin? %>
+          <%= "|" %><%= link_to "削除", user, method: :delete, data: { confirm: "削除してよろしいですか？" }, class: "btn btn-primary" %>
+        <% end %>
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h4 class="panel-title accordion-toggle">
-              <a data-toggle="collapse" data-parent="#accordion" href="#collapse<%= user.id %>" class="collapsed">基本情報編集</a>
+            <h4 class="panel-title">
+              <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#collapse<%= user.id %>" data-parent="#accordion" class="collapsed">基本情報編集</button>
             </h4>
           </div>
           <div id="collapse<%= user.id %>" class="panel-collapse collapse">
@@ -90,48 +91,12 @@
             </div>
           </div>
         </div>
+      </div>
       <% end %>
     </div>
   </section>
-  <!--
-  <table class="table table-condensed table-hover" id="table-users">
-    <thead>
-      <tr>
-        <th><%#= User.human_attribute_name :name %></th>
-        <th class="center"><%#= User.human_attribute_name :department %></th>
-        <%# if current_user.admin? %>
-          <th class="center"><%#= User.human_attribute_name :basic_time %></th>
-          <th class="center"><%#= User.human_attribute_name :work_time %></th>
-        <%# end %>
-        <th></th>
-      </tr>
-    </thead>
-
-    <%# @users.each do |user| %>
-      <tr>
-        <td>
-          <%#= link_to user.name, user %>
-        </td>
-        <td class="center"><%#= user.department.present? ? user.department : "未所属" %></td>
-        <td class="center"><%#= format_basic_info(user.basic_time) %></td>
-        <td class="center"><%#= format_basic_info(user.work_time) %></td>
-        <td class="center">
-          <%# if !user.admin? %>
-            <%#= link_to "基本情報編集", edit_basic_info_user_path(user), remote: true, class: "btn btn-success" %>
-            <%#= link_to "削除", user, method: :delete,
-                data: { confirm: "削除してよろしいですか？" }, class: "btn btn-danger" %>
-          <%# end %>
-        </td>
-      </tr>
-    <%# end %>
-  </table>
-  !-->
-  
   <%= will_paginate %>
 </div>
-
-<!--モーダルウインドウ表示-->
-<div id="edit-basic-info" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
 
 <script type="text/javascript">
   function file_selected(file_field){

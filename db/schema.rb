@@ -43,7 +43,9 @@ ActiveRecord::Schema.define(version: 20190728115905) do
     t.datetime "first_started_at"
     t.datetime "first_finished_at"
     t.boolean "next_day", default: false, null: false
+    t.boolean "applying_next_day", default: false, null: false
     t.string "note"
+    t.string "applying_note"
     t.integer "status_id", default: 1, null: false
     t.datetime "end_overtime"
     t.string "business_content"
@@ -60,9 +62,9 @@ ActiveRecord::Schema.define(version: 20190728115905) do
   end
 
   create_table "centers", force: :cascade do |t|
-    t.integer "number", null: false
-    t.string "name", null: false
-    t.string "attendance_type", null: false
+    t.integer "number"
+    t.string "name"
+    t.string "attendance_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -99,14 +101,14 @@ ActiveRecord::Schema.define(version: 20190728115905) do
     t.string "remember_digest"
     t.boolean "admin", default: false
     t.string "department"
-    t.datetime "basic_time", default: "2019-07-29 23:00:00"
-    t.datetime "work_time", default: "2019-07-29 22:30:00"
+    t.datetime "basic_time", default: "2019-08-02 23:00:00"
+    t.datetime "work_time", default: "2019-08-02 22:30:00"
     t.boolean "superior", default: false
     t.integer "employee_number"
     t.string "uid"
-    t.datetime "designated_work_start_time", default: "2019-07-30 00:00:00"
-    t.datetime "designated_work_end_time", default: "2019-07-30 09:00:00"
-    t.time "basic_work_time", default: "2000-01-01 23:00:00"
+    t.datetime "designated_work_start_time", default: "2019-08-03 00:00:00"
+    t.datetime "designated_work_end_time", default: "2019-08-03 09:00:00"
+    t.datetime "basic_work_time", default: "2019-08-02 23:00:00"
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 

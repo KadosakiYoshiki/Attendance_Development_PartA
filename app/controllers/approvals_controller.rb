@@ -22,7 +22,7 @@ class ApprovalsController < ApplicationController
         end
       end
       flash[:success] = "申請を処理しました。"
-      redirect_to users_url
+      redirect_to user_url
     end
     
   rescue ActiveRecord::RecordInvalid # トランザクションによるエラーの分岐
@@ -39,7 +39,7 @@ class ApprovalsController < ApplicationController
       redirect_to @user
     else
       flash[:danger] = "申請に失敗しました。"
-      redirect_to users_url
+      redirect_to user_url
     end
   end
   

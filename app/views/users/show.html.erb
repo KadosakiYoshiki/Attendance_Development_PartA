@@ -3,11 +3,15 @@
   <table class="table table-bordered table-condensed user-table">
     <tr>
       <td colspan="6">
-        <%= link_to "⇦", user_path(date: @first_day.prev_month), class: "btn btn-dark" %>
+        <% if @user == current_user %>
+          <%= link_to "⇦", user_path(date: @first_day.prev_month), class: "btn btn-dark" %>
+        <% end %>
         【<%= l(@first_day, format: :middle) %>】勤怠管理表
-        <%= link_to "⇨", user_path(date: @first_day.next_month), class: "btn btn-dark" %>
+        <% if @user == current_user %>
+          <%= link_to "⇨", user_path(date: @first_day.next_month), class: "btn btn-dark" %>
+        <% end %>
       </td>
-      <td colspan="3"><!--指定勤務時間：<%#= format_basic_info(@user.work_time) %> !-->
+      <td colspan="3">
         指定勤務開始時間：<%= l(@user.designated_work_start_time, format: :time) %><br>
         指定勤務終了時間：<%= l(@user.designated_work_end_time, format: :time) %>
       </td>
@@ -26,17 +30,39 @@
   </table>
 </div>
 
-<div class="btn-users-show">
-  <%= link_to "【所属長承認申請のお知らせ】#{Approval.where(superior_id: @user.id, status_id: '申請中').count}件", approvals_edit_approvals_user_path(@user), remote: true, "data-toggle" => "modal", "data-target" => "permit-approval"  %>
-  <%= link_to "【勤怠変更申請のお知らせ】#{Attendance.where(superior_id: @user.id, status_id: '申請中').count}件", attendances_edit_attendances_user_path(@user), remote: true, "data-toggle" => "modal", "data-target" => "permit-attendance" %>
-  <%= link_to "【残業申請のお知らせ】#{Attendance.where(superior_id_for_overtime: @user.id, status_id_overtime: '申請中').count}件", attendances_edit_overtimes_user_path(@user), remote: true, "data-toggle" => "modal", "data-target" => "permit-overtime" %>
-</div>
+<% if ActiveRecord::Type::Boolean.new.cast(@user.superior) && @user == current_user %>
+    <% approval = Approval.where(superior_id: @user.id, status_id: '申請中') %>
+    <% attendance = Attendance.where(superior_id: @user.id, status_id: '申請中') %>
+    <% overtime = Attendance.where(superior_id_for_overtime: @user.id, status_id_overtime: '申請中') %>
+  <div class="btn-users-show">
+    <% if approval.count > 0 %>
+      <p><%= link_to "【所属長承認申請のお知らせ】#{approval.count}件", approvals_edit_approvals_user_path(@user), remote: true, "data-toggle" => "modal", "data-target" => "permit-approval", class: "text-red" %>
+</p>
+    <% else %>
+      <p>【所属長承認申請のお知らせ】</p>
+    <% end %>
+    <% if attendance.count > 0 %>
+      <p><%= link_to "【勤怠変更申請のお知らせ】#{attendance.count}件", attendances_edit_attendances_user_path(@user), remote: true, "data-toggle" => "modal", "data-target" => "permit-attendance", class: "text-red" %>
+</p>
+    <% else %>
+      <p>【勤怠変更申請のお知らせ】</p>
+    <% end %>
+    <% if overtime.count > 0 %>
+      <p><%= link_to "【残業申請のお知らせ】#{overtime.count}件", attendances_edit_overtimes_user_path(@user), remote: true, "data-toggle" => "modal", "data-target" => "permit-overtime", class: "text-red" %>
+</p>
+    <% else %>
+      <p>【残業申請のお知らせ】</p>
+    <% end %>
+  </div>
+<% end %>
 
-<div class="btn-users-show">
-  <%= link_to "1ヶ月の勤怠編集へ", attendances_edit_one_month_user_path(date: @first_day), class: "btn btn-success" %>
-  <%= link_to "CSV出力", user_path(format: :csv, date: @first_day), class: "btn btn-primary" %>
-  <%= link_to "勤怠ログ(承認済)", attendances_logs_user_path(@user), class: "btn btn-primary" %>
-</div>
+<% if @user == current_user %>
+  <div class="btn-users-show">
+    <%= link_to "1ヶ月の勤怠編集へ", attendances_edit_one_month_user_path(date: @first_day), class: "btn btn-primary" %>
+    <%= link_to "CSV出力", user_path(format: :csv, date: @first_day), class: "btn btn-primary" %>
+    <%= link_to "勤怠ログ(承認済)", attendances_logs_user_path(@user), class: "btn btn-primary" %>
+  </div>
+<% end %>
 
 <div>
   <table class="table table-bordered table-condensed table-hover" id="table-attendances">
@@ -68,15 +94,19 @@
       <% @attendances.each do |day| %>
         <tr>
           <td colspan="1">
-            <% unless Date.current < day.worked_on %>
-              <%= link_to "残業申請", edit_overtime_user_attendance_path(@user, day), remote: true, class: "btn btn-primary" %>
-            <% end %>    
+            <% if @user == current_user %>
+              <% unless Date.current < day.worked_on %>
+                <%= link_to "残業申請", edit_overtime_user_attendance_path(@user, day), remote: true, class: "btn btn-primary" %>
+              <% end %>    
+            <% end %>
           </td>
           <td colspan="1"><%= l(day.worked_on, format: :short) %></td>
           <td colspan="1" class="<%= calender_color(day.worked_on.wday) %>"><%= $days_of_the_week[day.worked_on.wday] %></td>
           <td colspan="1">
-            <% if btn_text = attendance_state(day) %>
-              <%= link_to "#{btn_text}登録", user_attendance_path(@user, day), method: :patch, class: "btn btn-primary btn-attendance" %>
+            <% if @user == current_user %>
+              <% if btn_text = attendance_state(day) %>
+                <%= link_to "#{btn_text}登録", user_attendance_path(@user, day), method: :patch, class: "btn btn-primary btn-attendance" %>
+              <% end %>
             <% end %>
           </td>
           <td colspan="1"><%= l(day.started_at.floor_to(15.minutes), format: :time) if day.started_at.present? %></td>
@@ -96,9 +126,9 @@
                                 when '承認' then "勤怠編集#{User.find(day.superior_id).name}から承認済"
                                 when '否認' then "勤怠編集#{User.find(day.superior_id).name}不承認" end %><br>
                           <%= case day.status_id_overtime
-                                when '申請中' then "残業申請#{User.find(day.superior_id).name}へ申請中"
-                                when '承認' then "残業申請#{User.find(day.superior_id).name}から承認済"
-                                when '否認' then "残業申請#{User.find(day.superior_id).name}不承認" end %>
+                                when '申請中' then "残業申請#{User.find(day.superior_id_for_overtime).name}へ申請中"
+                                when '承認' then "残業申請#{User.find(day.superior_id_for_overtime).name}から承認済"
+                                when '否認' then "残業申請#{User.find(day.superior_id_for_overtime).name}不承認" end %>
           </td>
         </tr>
       <% end %>
@@ -116,11 +146,13 @@
             when '申請中' then "#{User.find(@approval.superior_id).name}へ申請中"
             when '承認' then "#{User.find(@approval.superior_id).name}から承認済"
             when '否認' then "#{User.find(@approval.superior_id).name}不承認" end %><br>
-          <%= form_with(model: @approval, url: user_approvals_path(@user), local: true) do |f| %>
-            <%= f.hidden_field :user_id, value: @user.id %>
-            <%= f.hidden_field :month, value: @first_day %>
-            <%= f.collection_select :superior_id, User.where(superior: true), :id, :name, :include_blank => true, :selected => 0, class: "btn btn-primary" %><br>
-            <%= f.submit "申請", class: "btn btn-primary" %>
+          <% if @user == current_user %>
+            <%= form_with(model: @approval, url: user_approvals_path(@user), local: true) do |f| %>
+              <%= f.hidden_field :user_id, value: @user.id %>
+              <%= f.hidden_field :month, value: @first_day %>
+              <%= f.collection_select :superior_id, User.where(superior: true).where.not(id: @user.id), :id, :name, :include_blank => true, :selected => 0, class: "btn btn-primary" %><br>
+              <%= f.submit "申請", class: "btn btn-primary" %>
+            <% end %>
           <% end %>
         </td>
       </tr>

@@ -3,32 +3,41 @@ ja:
     models:
       user: ユーザー
       attendance: 勤怠
-      overtime: 残業
+      center: 拠点
     attributes:
-        user:
-          id: ID
-          name: 名前
-          email: メールアドレス
-          department: 所属
-          employee_number: 社員番号
-          uid: カードID
-          basic_work_time: 基本勤務時間
-          designated_work_start_time: 指定勤務開始時間
-          designated_work_end_time: 指定勤務終了時間
-          basic_time: 基本時間
-          work_time: 勤務時間
-          password: パスワード
-          password_confirmation: パスワード再入力
-          created_at: 作成日
-          updated_at: 更新日
-        attendance:
-          worked_on: 日付
-          started_at: 出勤時間
-          finished_at: 退勤時間
-          note: 備考
-          user: ユーザーID
-          end_overtime: 終了予定時間
-          next_day: 翌日
-          business_content: 業務処理内容
-          permit_note: 指示者確認印
-          superior_id: 上長
+      user:
+        id: ID
+        name: 名前
+        email: メールアドレス
+        department: 所属
+        employee_number: 社員番号
+        uid: カードID
+        basic_work_time: 基本勤務時間
+        designated_work_start_time: 指定勤務開始時間
+        designated_work_end_time: 指定勤務終了時間
+        basic_time: 基本時間
+        work_time: 勤務時間
+        password: パスワード
+        password_confirmation: パスワード再入力
+        created_at: 作成日
+        updated_at: 更新日
+      attendance:
+        worked_on: 日付
+        started_at: 出勤時間
+        finished_at: 退勤時間
+        note: 備考
+        user: ユーザーID
+        end_overtime: 終了予定時間
+        next_day: 翌日
+        business_content: 業務処理内容
+        permit_note: 指示者確認印
+        superior_id: 上長
+      center:
+        number: 拠点番号
+        name: 拠点名
+        attendance_type: 勤怠種類
+    label:
+      center:
+        number: 拠点番号
+        name: 拠点名
+        attendance_type: 勤怠種類

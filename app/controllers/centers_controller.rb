@@ -1,6 +1,18 @@
 class CentersController < ApplicationController
+  
+  before_action :admin_user
+  
   def index
     @centers = Center.all
+    @user = Center.new
+  end
+  
+  def edit
+    @center = Center.find(params[:id])
+  end
+  
+  def new
+    @center = Center.new
   end
   
   def create
@@ -9,7 +21,7 @@ class CentersController < ApplicationController
       flash[:success] = "新規作成に成功しました。"
       redirect_to centers_path
     else
-      render centers_path
+      render :new
     end
   end
   
@@ -19,7 +31,7 @@ class CentersController < ApplicationController
       flash[:success] = "更新に成功しました。"
       redirect_to centers_path
     else
-      render centers_path
+      render :edit
     end
   end
   

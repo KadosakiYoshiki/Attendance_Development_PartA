@@ -32,10 +32,24 @@ class ApplicationController < ActionController::Base
     redirect_to root_url    
     end
   end
+  
+  def superior_user
+    unless current_user.superior?
+    flash[:danger] = "上長権限がありません。"
+    redirect_to root_url    
+    end
+  end
+  
+  def reject_admin_user
+    if current_user.admin? && User.find(params[:id]).admin?
+    flash[:danger] = "管理者はアクセスできません。"
+    redirect_to root_url    
+    end
+  end
 
   # 管理権限者、または現在ログインしているユーザーを許可します。
-  def admin_or_correct_user
-    unless current_user?(@user) || current_user.admin?
+  def superior_or_correct_user
+    unless current_user?(@user) || current_user.superior?
       flash[:danger] = "権限がありません。"
       redirect_to(root_url)
     end  

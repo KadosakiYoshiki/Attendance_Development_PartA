@@ -55,6 +55,10 @@
   }  
 }
 
+.under {
+  margin: 10px 0 10px 0;
+}
+
 .panel-heading {
     cursor: pointer;
 }
@@ -102,4 +106,15 @@
   p {
     font-weight: bold;
   }
+}
+
+
+/* 上長用申請有無 */
+.text-red {
+  color: red;
+}
+
+/* 拠点一覧ページ */
+.label-center {
+  margin-top: 5px;
 }

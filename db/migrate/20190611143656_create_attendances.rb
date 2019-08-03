@@ -7,7 +7,9 @@ class CreateAttendances < ActiveRecord::Migration[5.1]
       t.datetime :first_started_at
       t.datetime :first_finished_at
       t.boolean :next_day, null: false, default: false
+      t.boolean :applying_next_day, null: false, default: false
       t.string :note
+      t.string :applying_note
       t.integer :status_id, default: 1, null: false
       t.datetime :end_overtime
       t.string :business_content

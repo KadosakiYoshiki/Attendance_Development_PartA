@@ -7,7 +7,7 @@
       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>
-      <h3 class="modal-title">【1ヶ月の勤怠申請有無】</h3>
+      <h3 class="modal-title center">【1ヶ月の勤怠申請有無】</h3>
     </div>
     <div class="modal-body">
       <div class="row">
@@ -45,7 +45,9 @@
                   </div>
                 <% end %>
               <% end %>
-              <%= f.submit "変更を送信する", class: "btn btn-lg btn-primary" %>
+              <div class="center">
+                <%= f.submit "変更を送信する", class: "btn btn-lg btn-primary center" %>
+              </div>
             <% end %>
           <% else %>
             <h2>1ヶ月の勤怠申請はありません。</h2>

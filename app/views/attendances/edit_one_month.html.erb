@@ -40,7 +40,7 @@
                 <td></td>
               <% else %>
                 <td><%= attendance.text_field :note, class: "form-control" %></td>
-                <td><%= attendance.collection_select :superior_id, User.where(superior: true), :id, :name, :include_blank => true, :selected => 0, class: "form-control" %></td>
+                <td><%= attendance.collection_select :superior_id, User.where(superior: true).where.not(id: @user.id), :id, :name, :include_blank => true, :selected => 0, class: "form-control" %></td>
               <% end %>
             </tr>
           <% end %>

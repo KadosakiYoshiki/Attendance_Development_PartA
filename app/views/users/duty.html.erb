@@ -13,8 +13,8 @@
 
     <% @dutys.each do |duty| %>
       <tr>
-        <td><%= duty.user_id %></td>
-        <td><%= @users.find_by(id: duty.employee_number).name %></td>
+        <td><%= @users.find_by(id: duty.user_id).employee_number %></td>
+        <td><%= @users.find_by(id: duty.user_id).name %></td>
       </tr>
     <% end %>
   </table>
