@@ -1,2 +1,0 @@
-class Stamp < ApplicationRecord
-end
