@@ -55,7 +55,7 @@ class UsersController < ApplicationController
                     https://qiita.com/m-shin/items/7e8cdea2644e47b87fbf
                     
 =end
-    if params[:users_file] && File.extname("#{params[:filename]}") == ".csv"
+    if params[:users_file] && File.extname("#{params[:users_file].original_filename}") == ".csv"
       # 登録処理前のレコード数
       current_user_count = User.count
       users = []

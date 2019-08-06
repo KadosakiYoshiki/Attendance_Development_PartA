@@ -29,11 +29,15 @@ class ApprovalsController < ApplicationController
     flash[:danger] = "エラーがあった為、更新をキャンセルしました。"
     redirect_to approvals_edit_one_month_user_url(date: params[:date])
   end
-
-  def create
+  
+  def update
     @user = User.find(params[:user_id])
-    @approval = Approval.new(approval_params)
-    @approval.status_id = '申請中'
+    if params[:approval][:approval_id].present?
+      @approval = Approval.find(params[:approval][:approval_id])
+      @approval.update(approval_params)
+    else
+      @approval = Approval.new(approval_params)
+    end
     if @approval.save
       flash[:success] = "#{l(@approval.month, format: :middle)}の勤怠申請をしました。承認をお待ち下さい。"
       redirect_to @user
@@ -46,7 +50,7 @@ class ApprovalsController < ApplicationController
   private
   
     def approval_params
-      params.require(:approval).permit(:user_id, :month, :superior_id)
+      params.require(:approval).permit(:user_id, :month, :superior_id, :status_id)
     end
     
     def update_approvals_params

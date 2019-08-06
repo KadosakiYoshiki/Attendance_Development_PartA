@@ -138,10 +138,11 @@ class AttendancesController < ApplicationController
     end
     if dates_on.count > 0
       flash[:success] = "#{dates_on.join(', ')}の勤怠修正を申請しました。承認をお待ち下さい。"
+      redirect_to user_url(date: params[:date])
     else
       flash[:danger] = "最低でも1つはチェックを入れてください。"
+      redirect_to attendances_edit_one_month_user_url(date: params[:date])
     end
-    redirect_to user_url(date: params[:date])
     
   rescue ActiveRecord::RecordInvalid # トランザクションによるエラーの分岐
     flash[:danger] = "無効な入力データがあった為、更新をキャンセルしました。"

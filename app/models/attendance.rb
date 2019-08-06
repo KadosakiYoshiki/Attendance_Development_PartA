@@ -25,6 +25,10 @@ class Attendance < ApplicationRecord
     if started_at.present? && finished_at.present? && !next_day
       errors.add(:started_at, "より早い退勤時間は無効です") if started_at > finished_at
     end
+    
+    if applying_started_at.present? && applying_finished_at.present? && !applying_next_day
+      errors.add(:started_at, "より早い退勤時間は無効です") if applying_started_at > applying_finished_at
+    end
   end
   
   def cannot_config_day_at_future
