@@ -21,7 +21,7 @@ class ApprovalsController < ApplicationController
           approval.update_attributes(item)
         end
       end
-      flash[:success] = "申請を処理しました。"
+      flash[:success] = "申請を処理しました"
       redirect_to user_url
     end
     
