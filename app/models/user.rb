@@ -15,7 +15,6 @@ class User < ApplicationRecord
   validates :work_time, presence: true
   has_secure_password
   validates :password, presence: true, length: { minimum: 6 }, allow_nil: true
-  validates :uid, presence: true, uniqueness: true
   
   # 渡された文字列のハッシュ値を返します。
   def User.digest(string)

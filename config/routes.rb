@@ -1,14 +1,9 @@
 Rails.application.routes.draw do
 
-  get 'attendancelogs/create'
-
-  get 'centers/index'
-
-  get 'approvals/create'
-
   root 'static_pages#top'
   get '/signup', to: 'users#new'
   get '/users/on_duty', to: 'users#duty'
+  get '/users/edit_system_info', to: 'users#edit_system_info'
   post '/users/import', to: 'users#import'
   
   # ログイン機能
