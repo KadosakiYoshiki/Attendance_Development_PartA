@@ -8,7 +8,7 @@ class UsersController < ApplicationController
   before_action :set_one_month, only: :show
 
   def index
-    @users = User.search(params[:search]).paginate(page: params[:page])
+    @users = User.search(params[:search]).paginate(page: params[:page]).order(:id)
   end
   
   def duty
@@ -89,7 +89,7 @@ class UsersController < ApplicationController
   def update
     if @user.update_attributes(user_params)
       flash[:success] = "ユーザー情報を更新しました。"
-      redirect_to @user
+      redirect_to edit_user_url
     else
       render :edit
     end
